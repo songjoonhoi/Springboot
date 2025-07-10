@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 목록</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .product-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: inline-block; /* 여러 상품을 가로로 나열 */
+            width: 280px; /* 상품 아이템 너비 조정 */
+            margin-right: 15px;
+            vertical-align: top;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+        .product-item img {
+            max-width: 100%;
+            height: 200px; /* 이미지 높이 고정 */
+            object-fit: cover; /* 이미지가 잘리지 않게 채움 */
+            display: block;
+            margin-bottom: 10px;
+        }
+        .product-item h3 { margin: 0 0 5px 0; font-size: 1.2em; }
+        .product-item p { margin: 0 0 5px 0; color: #555; }
+        .product-item a { text-decoration: none; color: #007bff; font-weight: bold; }
+        .product-item a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>상품 목록</h1>
+
+    <div th:each="item, status : ${products}" class="product-item">
+        <img th:src="${item.imageUrl}" th:alt="${item.name}">
+
+        <h3><a th:href="@{/shop/detail/{name}(name=${item.name})}" th:text="${item.name}">상품 이름</a></h3>
+        <p>가격: <span th:text="|${item.price} 원|">0000000 원</span></p>
+
+        <p th:if="${status.first}" style="color: green;">(첫 번째 상품)</p>
+        <p th:if="${status.even}" style="color: blue;">(짝수번째 상품)</p>
+        <p th:if="${status.last}" style="color: red;">(마지막 상품)</p>
+        <p th:unless="${status.first or status.last}" style="color: orange;">(중간 상품, index: <span th:text="${status.index}"></span>)</p>
+
+        <p>판매자 (직접 출력): [[${item.seller}]]</p> </div>
+
+    <hr>
+    <p><a href="/">홈으로 돌아가기</a></p>
+</body>
+</html>

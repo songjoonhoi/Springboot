@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="|${product.name} 상세 정보|">상품 상세 정보</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .product-detail {
+            border: 1px solid #ccc;
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.15);
+        }
+        .product-detail img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+        .product-detail h1 { font-size: 2em; color: #333; margin-bottom: 10px; }
+        .product-detail p { margin-bottom: 8px; color: #555; }
+        .product-detail strong { color: #333; }
+        .back-link { display: block; margin-top: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div th:object="${product}" class="product-detail">
+        <h1 th:text="*{name}">상품명</h1>
+        <img th:src="*{imageUrl}" th:alt="*{name}">
+
+        <p><strong>판매자:</strong> <span th:text="*{seller}">판매자명</span></p>
+        <p><strong>수량:</strong> <span th:text="*{quantity}">0</span>개</p>
+        <p><strong>가격:</strong> <span th:text="*{price}">000000</span>원</p>
+
+        <div th:with="displayPrice=*{price}">
+            <p><strong>할인 가격 (th:with 사용):</strong> <span th:text="${displayPrice * 0.9}"></span>원</p>
+        </div>
+
+        <p th:if="*{quantity > 0}" style="color: green; font-weight: bold;">재고 있음!</p>
+        <p th:unless="*{quantity > 0}" style="color: red; font-weight: bold;">재고 없음!</p>
+
+        <div th:switch="*{seller}">
+            <p th:case="'ABC 전자'" style="color: purple;">ABC 전자에서 보증하는 상품입니다.</p>
+            <p th:case="'XYZ 통신'" style="color: navy;">XYZ 통신만의 특별 할인 혜택!</p>
+            <p th:case="*" style="color: gray;">일반 판매자 상품입니다.</p>
+        </div>
+    </div>
+
+    <div class="back-link">
+        <a th:href="@{/shop/list}">상품 목록으로 돌아가기</a>
+    </div>
+</body>
+</html>
